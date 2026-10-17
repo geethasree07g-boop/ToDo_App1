@@ -1,0 +1,438 @@
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: #FFF1F5;
+    color: #3D2938;
+    line-height: 1.6;
+    min-height: 100vh;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.header {
+    background-color: #F8C8DC;
+    color: #54243F;
+    padding: 25px 8%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    box-shadow: 0 3px 10px rgba(80, 30, 60, 0.08);
+}
+
+.header h1 {
+    font-size: 30px;
+    margin-bottom: 5px;
+}
+
+#greeting {
+    color: #70435B;
+    font-size: 15px;
+}
+
+/* =====================================
+   3. MAIN CONTAINER
+===================================== */
+
+.container {
+    width: 90%;
+    max-width: 850px;
+    margin: 35px auto;
+}
+
+/* =====================================
+   4. COMMON SECTION DESIGN
+===================================== */
+
+.container section {
+    background-color: #FFFFFF;
+    padding: 25px;
+    margin-bottom: 22px;
+    border-radius: 14px;
+    border: 1px solid #F3D7E3;
+    box-shadow: 0 5px 18px rgba(100, 50, 75, 0.06);
+}
+
+.container h2 {
+    color: #8B3A62;
+    font-size: 21px;
+    margin-bottom: 15px;
+}
+
+/* =====================================
+   5. DATE SECTION
+===================================== */
+
+.date-section {
+    border-left: 5px solid #D96C9D !important;
+}
+
+#todayDate {
+    color: #5F4354;
+    font-size: 16px;
+}
+
+/* =====================================
+   6. QUOTE SECTION
+===================================== */
+
+.quote-section {
+    background-color: #FFF8FB !important;
+    border-left: 5px solid #B48AD9 !important;
+}
+
+#quote {
+    color: #76536B;
+    font-size: 16px;
+    font-style: italic;
+}
+
+/* =====================================
+   7. ADD TASK FORM
+===================================== */
+
+#taskForm {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+#taskInput,
+#taskTime {
+    padding: 12px;
+    border: 1px solid #E4C4D3;
+    border-radius: 8px;
+    font-size: 15px;
+    background-color: #FFFBFD;
+    color: #3D2938;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+#taskInput {
+    flex: 1;
+    min-width: 180px;
+}
+
+#taskTime {
+    min-width: 135px;
+}
+
+#taskInput:focus,
+#taskTime:focus {
+    border-color: #B94E80;
+    box-shadow: 0 0 0 3px rgba(185, 78, 128, 0.12);
+}
+
+/* =====================================
+   8. BUTTONS
+===================================== */
+
+button {
+    border: none;
+    border-radius: 8px;
+    padding: 11px 17px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.2s;
+}
+
+button:hover {
+    transform: translateY(-1px);
+}
+
+#taskForm button {
+    background-color: #A83E70;
+    color: #FFFFFF;
+}
+
+#taskForm button:hover {
+    background-color: #872C59;
+}
+
+/* Dark mode button */
+
+#themeBtn {
+    background-color: #FFFFFF;
+    color: #84365E;
+    border: 1px solid #E7B6CC;
+    white-space: nowrap;
+}
+
+#themeBtn:hover {
+    background-color: #FFF0F6;
+}
+
+/* Clear all button */
+
+#clearBtn {
+    background-color: #FCE4EC;
+    color: #A52F52;
+}
+
+#clearBtn:hover {
+    background-color: #F7CEDD;
+}
+
+/* =====================================
+   9. TASK LIST HEADER
+===================================== */
+
+.list-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 15px;
+}
+
+.list-header h2 {
+    margin-bottom: 0;
+}
+
+/* =====================================
+   10. TASK ITEMS
+===================================== */
+
+#tasklist {
+    list-style: none;
+}
+
+.task-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    padding: 15px;
+    margin-bottom: 12px;
+    border: 1px solid #F0D8E3;
+    border-radius: 10px;
+    background-color: #FFFAFC;
+}
+
+.task-content {
+    flex: 1;
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+
+.task-name {
+    color: #442D3B;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.task-time {
+    color: #967487;
+    font-size: 13px;
+    margin-top: 4px;
+}
+
+/* Completed tasks */
+
+.task-item.completed {
+    background-color: #F1F8F2;
+    border-color: #C9E4CE;
+}
+
+.task-item.completed .task-name {
+    text-decoration: line-through;
+    color: #64816A;
+}
+
+/* =====================================
+   11. TASK ACTION BUTTONS
+===================================== */
+
+.task-buttons {
+    display: flex;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+.complete-btn {
+    background-color: #D8F0DE;
+    color: #27643A;
+}
+
+.complete-btn:hover {
+    background-color: #BDE4C7;
+}
+
+.delete-btn {
+    background-color: #FBE0E5;
+    color: #A52D48;
+}
+
+.delete-btn:hover {
+    background-color: #F5C5D0;
+}
+
+/* Empty task message */
+
+#emptyMessege {
+    color: #987B8C;
+    text-align: center;
+    padding: 18px 0;
+    font-size: 15px;
+}
+
+/* =====================================
+   12. FOOTER
+===================================== */
+
+footer {
+    text-align: center;
+    background-color: #F8C8DC;
+    color: #54243F;
+    padding: 18px;
+    margin-top: 40px;
+    font-size: 14px;
+}
+
+/* =====================================
+   13. DARK MODE
+   Works with your JavaScript:
+   document.body.classList.toggle("dark")
+===================================== */
+
+body.dark {
+    background-color: #19151D;
+    color: #F3EAF2;
+}
+
+body.dark .header,
+body.dark footer {
+    background-color: #302131;
+    color: #F8DCEC;
+}
+
+body.dark #greeting {
+    color: #E0C4D8;
+}
+
+body.dark .container section {
+    background-color: #261F2A;
+    border-color: #493649;
+    box-shadow: 0 5px 18px rgba(0, 0, 0, 0.15);
+}
+
+body.dark .container h2 {
+    color: #F0A8CD;
+}
+
+body.dark #todayDate,
+body.dark #quote {
+    color: #E1CADC;
+}
+
+body.dark .quote-section {
+    background-color: #2D2233 !important;
+    border-left-color: #B48AD9 !important;
+}
+
+body.dark #taskInput,
+body.dark #taskTime {
+    background-color: #352B39;
+    color: #FFFFFF;
+    border-color: #61465B;
+}
+
+body.dark #taskInput::placeholder {
+    color: #C1AFC0;
+}
+
+body.dark #themeBtn {
+    background-color: #493449;
+    color: #F8DCEC;
+    border-color: #6B5067;
+}
+
+body.dark #themeBtn:hover {
+    background-color: #5A4057;
+}
+
+body.dark #clearBtn {
+    background-color: #512A3A;
+    color: #FFC4D3;
+}
+
+body.dark .task-item {
+    background-color: #302632;
+    border-color: #4B3848;
+}
+
+body.dark .task-name {
+    color: #F6EAF2;
+}
+
+body.dark .task-time {
+    color: #CFB5C8;
+}
+
+body.dark .task-item.completed {
+    background-color: #24352B;
+    border-color: #42644B;
+}
+
+body.dark .task-item.completed .task-name {
+    color: #B3D7B8;
+}
+
+body.dark #emptyMessege {
+    color: #C8B3C4;
+}
+
+/* =====================================
+   14. MOBILE RESPONSIVE DESIGN
+===================================== */
+
+@media (max-width: 600px) {
+    .header {
+        padding: 20px;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .header h1 {
+        font-size: 25px;
+    }
+
+    .container {
+        width: 92%;
+        margin: 22px auto;
+    }
+
+    .container section {
+        padding: 18px;
+    }
+
+    #taskForm {
+        flex-direction: column;
+    }
+
+    #taskInput,
+    #taskTime,
+    #taskForm button {
+        width: 100%;
+    }
+
+    .task-item {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .task-buttons {
+        width: 100%;
+    }
+
+    .list-header {
+        align-items: center;
+    }
+}
