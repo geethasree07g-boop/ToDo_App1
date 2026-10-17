@@ -1,93 +1,93 @@
+
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    <meta name="description" content="A simple and elegant To-Do App to organize daily tasks.">
+
     <title>My To-Do App</title>
 
-    <link rel="stylesheet" href="Style.css">
+    <!-- Connect CSS file -->
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Connect JavaScript file -->
+    <script src="script.js" defer></script>
 </head>
 
 <body>
 
+    <!-- Header -->
     <header class="header">
-
         <div>
             <h1>My To-Do App</h1>
-            <p id="greeting"></p>
+            <p id="greeting" aria-live="polite"></p>
         </div>
 
-        <button id="themeBtn"> Dark Mode</button>
-
+        <button id="themeBtn" type="button" aria-pressed="false">
+            🌙 Dark Mode
+        </button>
     </header>
 
-
+    <!-- Main content -->
     <main class="container">
 
-        <!-- Date Section -->
+        <!-- Date section -->
         <section class="date-section">
-
             <h2>Today's Date</h2>
-
-            <span id="todayDate"></span>
-
+            <p id="todayDate"></p>
         </section>
 
-
-        <!-- Quote Section -->
+        <!-- Quote section -->
         <section class="quote-section">
-
             <h2>Quote of the Day</h2>
-
             <p id="quote"></p>
-
         </section>
 
-
-        <!-- Add Task Section -->
+        <!-- Add task section -->
         <section class="task-section">
-
             <h2>Add New Task</h2>
 
             <form id="taskForm">
+                <label class="sr-only" for="taskInput">
+                    Task name
+                </label>
 
                 <input
                     type="text"
                     id="taskInput"
                     placeholder="Enter your task"
+                    maxlength="200"
                     required
                 >
+
+                <label class="sr-only" for="taskTime">
+                    Task time
+                </label>
 
                 <input
                     type="time"
                     id="taskTime"
+                    aria-label="Task time (optional)"
                 >
 
-                <button type="submit">
-                    Add Task
-                </button>
-
+                <button type="submit">Add Task</button>
             </form>
-
         </section>
 
-
-        <!-- Task List -->
+        <!-- Task list section -->
         <section class="list-section">
 
             <div class="list-header">
-
                 <h2>My Tasks</h2>
 
-                <button id="clearBtn">
+                <button id="clearBtn" type="button">
                     Clear All
                 </button>
-
             </div>
 
-            <ul id="taskList"></ul>
+            <ul id="taskList" aria-live="polite"></ul>
 
             <p id="emptyMessage">
                 No tasks added yet.
@@ -97,18 +97,10 @@
 
     </main>
 
-
+    <!-- Footer -->
     <footer>
-
-        <p>
-            My To-Do App  2026
-        </p>
-
+        <p>My To-Do App &copy; 2026</p>
     </footer>
 
-
-    <script src="script.js"></script>
-
 </body>
-
 </html>
