@@ -1,510 +1,231 @@
-// ==========================================
-// TO-DO APPLICATION
-// ==========================================
 
+"use strict";
 
 // Get HTML elements
-
 const taskForm = document.getElementById("taskForm");
-
 const taskInput = document.getElementById("taskInput");
-
-const taskTime = document.getElementById("taskTime");
-
+const taskTimeInput = document.getElementById("taskTime");
 const taskList = document.getElementById("taskList");
-
 const emptyMessage = document.getElementById("emptyMessage");
-
 const clearBtn = document.getElementById("clearBtn");
-
 const themeBtn = document.getElementById("themeBtn");
-
 const greeting = document.getElementById("greeting");
-
 const todayDate = document.getElementById("todayDate");
-
 const quote = document.getElementById("quote");
 
-
-// ==========================================
-// TASK ARRAY
-// ==========================================
-
-let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
-
-
-// ==========================================
-// QUOTES
-// ==========================================
+const STORAGE_KEY = "todo-app-tasks";
+const THEME_KEY = "todo-app-theme";
 
 const quotes = [
-
-    "Believe in yourself and keep learning.",
-
-    "Small progress is still progress.",
-
-    "Success comes from consistent effort.",
-
-    "Don't stop learning.",
-
-    "Practice makes you better.",
-
-    "Every expert was once a beginner.",
-
-    "Your future depends on what you do today."
-
+  "Believe in yourself and keep learning.",
+  "Small progress is still progress.",
+  "Success comes from consistent effort.",
+  "Don't stop learning.",
+  "Practice makes you better.",
+  "Every expert was once a beginner.",
+  "Your future depends on what you do today."
 ];
 
-
-// ==========================================
-// DISPLAY DATE
-// ==========================================
-
-function displayDate() {
-
-    const today = new Date();
-
-    const options = {
-        weekday: "long",
-        year: "numeric",
-        month: "long",
-        day: "numeric"
-    };
-
-    todayDate.textContent =
-        today.toLocaleDateString("en-IN", options);
+// Load saved tasks safely
+function readSavedTasks() {
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    const parsed = saved ? JSON.parse(saved) : [];
+    return Array.isArray(parsed) ? parsed : [];
+  } catch (error) {
+    console.warn("Could not load saved tasks:", error);
+    return [];
+  }
 }
 
+let tasks = readSavedTasks();
 
-// ==========================================
-// DISPLAY GREETING
-// ==========================================
-
-function displayGreeting() {
-
-    const hour = new Date().getHours();
-
-    let message;
-
-
-    if (hour < 12) {
-
-        message = "Good Morning, User!";
-
-    } else if (hour < 17) {
-
-        message = "Good Afternoon, User!";
-
-    } else {
-
-        message = "Good Evening, User!";
-
-    }
-
-
-    greeting.textContent = message;
-}
-
-
-// ==========================================
-// DISPLAY RANDOM QUOTE
-// ==========================================
-
-function displayQuote() {
-
-    const randomIndex =
-        Math.floor(Math.random() * quotes.length);
-
-    quote.textContent =
-        quotes[randomIndex];
-}
-
-
-// ==========================================
-// DISPLAY TASKS
-// ==========================================
-
-function displayTasks() {
-
-    taskList.innerHTML = "";
-
-
-    if (tasks.length === 0) {
-
-        emptyMessage.style.display = "block";
-
-        return;
-
-    }
-
-
-    emptyMessage.style.display = "none";
-
-
-    tasks.forEach(function(task) {
-
-        const li = document.createElement("li");
-
-        li.className = "task-item";
-
-
-        if (task.completed) {
-
-            li.classList.add("completed");
-
-        }
-
-
-        // Task content
-
-        const taskContent =
-            document.createElement("div");
-
-        taskContent.className =
-            "task-content";
-
-
-        const taskName =
-            document.createElement("div");
-
-        taskName.className =
-            "task-name";
-
-        taskName.textContent =
-            task.name;
-
-
-        const taskTimeElement =
-            document.createElement("div");
-
-        taskTimeElement.className =
-            "task-time";
-
-
-        if (task.time) {
-
-            taskTimeElement.textContent =
-                "⏰ " + task.time;
-
-        } else {
-
-            taskTimeElement.textContent =
-                "No time selected";
-
-        }
-
-
-        taskContent.appendChild(taskName);
-
-        taskContent.appendChild(taskTimeElement);
-
-
-        // Buttons
-
-        const buttons =
-            document.createElement("div");
-
-        buttons.className =
-            "task-buttons";
-
-
-        const completeButton =
-            document.createElement("button");
-
-        completeButton.className =
-            "complete-btn";
-
-        completeButton.textContent =
-            task.completed
-                ? "Undo"
-                : "Done";
-
-
-        completeButton.addEventListener(
-            "click",
-            function() {
-
-                toggleTask(task.id);
-
-            }
-        );
-
-
-        const deleteButton =
-            document.createElement("button");
-
-        deleteButton.className =
-            "delete-btn";
-
-        deleteButton.textContent =
-            "Delete";
-
-
-        deleteButton.addEventListener(
-            "click",
-            function() {
-
-                deleteTask(task.id);
-
-            }
-        );
-
-
-        buttons.appendChild(completeButton);
-
-        buttons.appendChild(deleteButton);
-
-
-        // Add everything to li
-
-        li.appendChild(taskContent);
-
-        li.appendChild(buttons);
-
-
-        taskList.appendChild(li);
-
-    });
-}
-
-
-// ==========================================
-// ADD TASK
-// ==========================================
-
-taskForm.addEventListener(
-    "submit",
-    function(event) {
-
-        // Stop page refresh
-
-        event.preventDefault();
-
-
-        const taskName =
-            taskInput.value.trim();
-
-        const time =
-            taskTime.value;
-
-
-        // Validation
-
-        if (taskName === "") {
-
-            alert("Please enter a task.");
-
-            return;
-
-        }
-
-
-        // Create task object
-
-        const newTask = {
-
-            id: Date.now(),
-
-            name: taskName,
-
-            time: time,
-
-            completed: false
-
-        };
-
-
-        // Add task to array
-
-        tasks.push(newTask);
-
-
-        // Save
-
-        saveTasks();
-
-
-        // Display
-
-        displayTasks();
-
-
-        // Clear form
-
-        taskInput.value = "";
-
-        taskTime.value = "";
-
-    }
-);
-
-
-// ==========================================
-// SAVE TASKS
-// ==========================================
-
+// Save tasks in browser storage
 function saveTasks() {
-
-    localStorage.setItem(
-        "tasks",
-        JSON.stringify(tasks)
-    );
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
+  } catch (error) {
+    console.warn("Could not save tasks:", error);
+    alert("Your browser could not save tasks. Check browser storage settings.");
+  }
 }
 
+// Show today's date
+function displayDate() {
+  todayDate.textContent = new Date().toLocaleDateString("en-IN", {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric"
+  });
+}
 
-// ==========================================
-// COMPLETE / UNCOMPLETE TASK
-// ==========================================
+// Show greeting
+function displayGreeting() {
+  const hour = new Date().getHours();
 
+  if (hour < 12) {
+    greeting.textContent = "Good morning! Ready to plan your day?";
+  } else if (hour < 17) {
+    greeting.textContent = "Good afternoon! Keep making progress.";
+  } else {
+    greeting.textContent = "Good evening! Let's organize your tasks.";
+  }
+}
+
+// Show a random quote
+function displayQuote() {
+  const index = Math.floor(Math.random() * quotes.length);
+  quote.textContent = quotes[index];
+}
+
+// Display all tasks
+function displayTasks() {
+  taskList.replaceChildren();
+  emptyMessage.hidden = tasks.length > 0;
+
+  tasks.forEach((task) => {
+    const li = document.createElement("li");
+    li.className = "task-item";
+
+    if (task.completed) {
+      li.classList.add("completed");
+    }
+
+    const content = document.createElement("div");
+    content.className = "task-content";
+
+    const name = document.createElement("div");
+    name.className = "task-name";
+    name.textContent = task.name;
+
+    const time = document.createElement("div");
+    time.className = "task-time";
+    time.textContent = task.time
+      ? `⏰ ${task.time}`
+      : "No time selected";
+
+    content.append(name, time);
+
+    const buttons = document.createElement("div");
+    buttons.className = "task-buttons";
+
+    const completeButton = document.createElement("button");
+    completeButton.type = "button";
+    completeButton.className = "complete-btn";
+    completeButton.textContent = task.completed ? "Undo" : "Done";
+    completeButton.addEventListener("click", () => toggleTask(task.id));
+
+    const deleteButton = document.createElement("button");
+    deleteButton.type = "button";
+    deleteButton.className = "delete-btn";
+    deleteButton.textContent = "Delete";
+    deleteButton.addEventListener("click", () => deleteTask(task.id));
+
+    buttons.append(completeButton, deleteButton);
+    li.append(content, buttons);
+    taskList.appendChild(li);
+  });
+}
+
+// Add a new task
+taskForm.addEventListener("submit", (event) => {
+  event.preventDefault();
+
+  const name = taskInput.value.trim();
+  const time = taskTimeInput.value;
+
+  if (!name) {
+    alert("Please enter a task.");
+    taskInput.focus();
+    return;
+  }
+
+  tasks.push({
+    id: `${Date.now()}-${Math.random().toString(16).slice(2)}`,
+    name,
+    time,
+    completed: false
+  });
+
+  saveTasks();
+  displayTasks();
+  taskForm.reset();
+  taskInput.focus();
+});
+
+// Mark task completed or undo completion
 function toggleTask(id) {
+  tasks = tasks.map((task) =>
+    task.id === id
+      ? { ...task, completed: !task.completed }
+      : task
+  );
 
-    tasks = tasks.map(function(task) {
-
-        if (task.id === id) {
-
-            task.completed =
-                !task.completed;
-
-        }
-
-        return task;
-
-    });
-
-
-    saveTasks();
-
-    displayTasks();
+  saveTasks();
+  displayTasks();
 }
 
-
-// ==========================================
-// DELETE TASK
-// ==========================================
-
+// Delete one task
 function deleteTask(id) {
+  tasks = tasks.filter((task) => task.id !== id);
+  saveTasks();
+  displayTasks();
+}
 
-    tasks = tasks.filter(function(task) {
+// Clear all tasks
+clearBtn.addEventListener("click", () => {
+  if (tasks.length === 0) {
+    alert("There are no tasks to clear.");
+    return;
+  }
 
-        return task.id !== id;
-
-    });
-
-
+  if (confirm("Are you sure you want to delete all tasks?")) {
+    tasks = [];
     saveTasks();
-
     displayTasks();
+  }
+});
+
+// Apply light or dark theme
+function applyTheme(theme) {
+  const isDark = theme === "dark";
+
+  document.body.classList.toggle("dark", isDark);
+  themeBtn.textContent = isDark
+    ? "☀️ Light Mode"
+    : "🌙 Dark Mode";
+
+  themeBtn.setAttribute("aria-pressed", String(isDark));
 }
 
+// Switch theme when button is clicked
+themeBtn.addEventListener("click", () => {
+  const nextTheme = document.body.classList.contains("dark")
+    ? "light"
+    : "dark";
 
-// ==========================================
-// CLEAR ALL TASKS
-// ==========================================
+  applyTheme(nextTheme);
 
-clearBtn.addEventListener(
-    "click",
-    function() {
+  try {
+    localStorage.setItem(THEME_KEY, nextTheme);
+  } catch (error) {
+    console.warn("Could not save theme preference:", error);
+  }
+});
 
-        if (tasks.length === 0) {
-
-            alert("There are no tasks.");
-
-            return;
-
-        }
-
-
-        const confirmDelete =
-            confirm(
-                "Are you sure you want to delete all tasks?"
-            );
-
-
-        if (confirmDelete) {
-
-            tasks = [];
-
-            saveTasks();
-
-            displayTasks();
-
-        }
-
-    }
-);
-
-
-// ==========================================
-// DARK / LIGHT MODE
-// ==========================================
-
-themeBtn.addEventListener(
-    "click",
-    function() {
-
-        document.body.classList.toggle("dark");
-
-
-        if (
-            document.body.classList.contains("dark")
-        ) {
-
-            themeBtn.textContent =
-                "☀️ Light Mode";
-
-            localStorage.setItem(
-                "theme",
-                "dark"
-            );
-
-        } else {
-
-            themeBtn.textContent =
-                "🌙 Dark Mode";
-
-            localStorage.setItem(
-                "theme",
-                "light"
-            );
-
-        }
-
-    }
-);
-
-
-// ==========================================
-// LOAD SAVED THEME
-// ==========================================
-
+// Load saved theme
 function loadTheme() {
-
-    const savedTheme =
-        localStorage.getItem("theme");
-
-
-    if (savedTheme === "dark") {
-
-        document.body.classList.add("dark");
-
-        themeBtn.textContent =
-            "☀️ Light Mode";
-
-    }
-
+  try {
+    applyTheme(localStorage.getItem(THEME_KEY) || "light");
+  } catch (error) {
+    applyTheme("light");
+  }
 }
 
-
-// ==========================================
-// INITIALIZE APPLICATION
-// ==========================================
-
+// Initialize application
 displayDate();
-
 displayGreeting();
-
 displayQuote();
-
-displayTasks();
-
 loadTheme();
+displayTasks();
